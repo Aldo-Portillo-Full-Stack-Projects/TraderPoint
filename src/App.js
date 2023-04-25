@@ -1,5 +1,6 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { secretKey } from "./vars";
 const data = [
   {
       "v": 577135,
@@ -162,23 +163,51 @@ const data = [
       "n": 4461
   }
 ]
-const renderLineChart = (
-  <LineChart width={400} height={400} data={data}>
-    <Line type="monotone" dataKey="o" stroke="#8884d8" />
-    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-    <XAxis dataKey="t" />
-    <YAxis domain={[128, 132]}/>
-    <Tooltip />
-  </LineChart>
-);
+
+
+//const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplyer}/${timeUnit}/${startDate}/${endDate}}?adjusted=true&sort=asc&limit=50000&apiKey=${apiKey}`
 
 function App() {
+
+  const [searchParams, setSearchParams] = React.useState({
+    ticker: "TSLA",
+    multiplyer: "1",
+    timeUnit: "hour",
+    startDate: "2023-01-09",
+    endDate: "2023-01-09",
+    apiKey: secretKey,
+  })
+
+  const [stockData, setStockData] = React.useState([])
+
+  const renderLineChart = (
+    <LineChart width={400} height={400} data={stockData}>
+      <Line type="monotone" dataKey="o" stroke="#8884d8" />
+      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+      <XAxis dataKey="t" />
+      <YAxis domain={[128, 132]}/>
+      <Tooltip />
+    </LineChart>
+  );
+
+  async function callAPI () {
+    const {ticker, multiplyer, timeUnit, startDate, endDate, apiKey} = searchParams
+    try{
+      const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplyer}/hour/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=50000&apiKey=${apiKey}`)
+      const data = await res.json()
+      setStockData(data.results)
+      console.log(data)
+    } catch(err){
+      console.log(err);
+    }
+  }
   return (
     <div className="App">
       <header className="App-header">
         <h1>Trader Point</h1>
       </header>
       {renderLineChart}
+      <button onClick={callAPI}>:)</button>
     </div>
   );
 }
