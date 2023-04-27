@@ -6,14 +6,22 @@ import { secretKey } from "./vars";
 
 //const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplyer}/${timeUnit}/${startDate}/${endDate}}?adjusted=true&sort=asc&limit=50000&apiKey=${apiKey}`
 
+const milliseconds = {
+  day: 86400000,
+  week: 604800000,
+  month: 2628000000,
+  quarter: 7884000000,
+  year: 31536000000,
+}
+
 function App() {
 
   const [searchParams, setSearchParams] = React.useState({
     ticker: "TSLA",
     multiplyer: "1",
     timeUnit: "hour",
-    startDate: "2023-01-09",
-    endDate: "2023-01-09",
+    startDate: Date.now()- 31536000000,
+    endDate: Date.now(),
     apiKey: secretKey,
   })
 
@@ -28,6 +36,7 @@ function App() {
       <Tooltip />
     </LineChart>
   );
+
 
   
   return (
