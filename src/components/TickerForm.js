@@ -17,13 +17,24 @@ export default function TickerForm({searchParams, setStockData, setSearchParams}
 
       const searchStock = (e) => {
         e.preventDefault()
+
         callAPI()
+      }
+
+      const modifySearchParams = (e) => {
+
+        setSearchParams({
+            ...searchParams,
+            [e.target.name]: e.target.value.toUpperCase() //Maybe find a different way to do this
+        })
+
+        console.log(searchParams)
       }
     
 
   return (
     <form onSubmit={searchStock}>
-        <input type="text" />
+        <input type="text" name="ticker" autoCapitalize='words' onChange={modifySearchParams}/>
         <button type="submit">Search</button>
     </form>
   )
