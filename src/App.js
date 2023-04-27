@@ -1,5 +1,6 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import BoxPlotComponent from "./components/BoxPlotComponent";
 import TickerForm from "./components/TickerForm";
 import { secretKey } from "./vars";
 
@@ -13,6 +14,7 @@ const milliseconds = {
   quarter: 7884000000,
   year: 31536000000,
 }
+
 
 function App() {
 
@@ -46,6 +48,7 @@ function App() {
       </header>
       <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
       {renderLineChart}
+      <BoxPlotComponent stockData={stockData} />
     </div>
   );
 }
