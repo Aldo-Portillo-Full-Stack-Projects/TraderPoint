@@ -21,7 +21,7 @@ export default function BoxPlotComponent({stockData}) {
       const yRange = [height - marginBottom, marginTop]
 
       const xFormat = "%b %-d"
-      const yType = scaleLinear()
+      const yFormat = "~f"
       
       //Compute Variables
       /** 
@@ -55,8 +55,9 @@ export default function BoxPlotComponent({stockData}) {
 
         /*Write scales and axis*/
         const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding)
-        const yScale = yType(yDomain, yRange)
+        const yScale = scaleLinear(yDomain, yRange)
         const xAxis = d3.axisBottom(xScale).tickFormat(d3.utcFormat(xFormat)).tickValues(xTicks)
+        const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
       
 
         //Write title
@@ -68,6 +69,33 @@ export default function BoxPlotComponent({stockData}) {
                             Close: ${formatValue(Yc)[i]}
                             Low: ${formatValue(Yl)[i]}
                             High: ${formatValue(Yh)[i]}` // Might need to only do this if default doesnt exist during rerender
+
+        //Append Gs to svg
+
+        svg.append("g")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("viewBox", [0, 0, width, height])
+          .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+        svg.append("g")
+          .attr("transform", `translate(0,${height - marginBottom})`)
+          .call(xAxis)
+          .call(g => g.select(".domain").remove());
+    
+        svg.append("g")
+          .attr("transform", `translate(${marginLeft},0)`)
+          .call(yAxis)
+          .call(g => g.select(".domain").remove())
+          .call(g => g.selectAll(".tick line").clone()
+              .attr("stroke-opacity", 0.2)
+              .attr("x2", width - marginLeft - marginRight))
+          .call(g => g.append("text")
+              .attr("x", -marginLeft)
+              .attr("y", 10)
+              .attr("fill", "currentColor")
+              .attr("text-anchor", "start")
+              .text("mone"));
       // const xAxis = (g) => g.attr("transform", `translate(0,${height - margin.bottom})`).call(
       //     d3
       //       .axisBottom(X)
@@ -120,14 +148,14 @@ export default function BoxPlotComponent({stockData}) {
         ref={ref}
         style={{
           height: 500,
-          width: "100%",
-          marginRight: "0px",
-          marginLeft: "0px",
+          width: 500,
+          marginRight: "30px",
+          marginLeft: "20px",
         }}
       >
-        <g className="plot-area" />
+        {/* <g className="plot-area" />
         <g className="x-axis" />
-        <g className="y-axis" />
+        <g className="y-axis" /> */}
     </svg>
     </>
   );
