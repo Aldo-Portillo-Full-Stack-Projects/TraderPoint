@@ -11,6 +11,7 @@ export default function BoxPlotComponent({stockData}) {
       const width = 500;
       const margin = { top: 20, right: 30, bottom: 30, left: 40 };
 
+      const xPadding = 0.2
       //Compute Variables
       /** 
       const X = d3
@@ -35,6 +36,10 @@ export default function BoxPlotComponent({stockData}) {
         const weeks = (start, stop, stride) => d3.utcMonday.every(stride).range(start, +stop + 1);
         const weekdays = (start, stop) => d3.utcDays(start, +stop + 1).filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6);
         
+        /*Default Domain and Ticks*/
+        const xDomain = weekdays(d3.min(X), d3.max(X))
+        const yDomain = [d3.min(Yl), d3.max(Yh)]
+        const xTicks = weeks(d3.min(xDomain), d3.max(xDomain), 2)
 
 
       
