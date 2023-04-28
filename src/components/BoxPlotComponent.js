@@ -59,6 +59,15 @@ export default function BoxPlotComponent({stockData}) {
         const xAxis = d3.axisBottom(xScale).tickFormat(d3.utcFormat(xFormat)).tickValues(xTicks)
       
 
+        //Write title
+        const formatDate = d3.utcFormat("%B %-d, %Y")
+        const formatValue = d3.format(".2f")
+        const formatChange = (f => (y0, y1) => f((y1-y0) / y0))(d3.format("+.2%"))
+        const title = i => `${formatDate(X[i])} 
+                            Open: ${formatValue(Yo)[i]}
+                            Close: ${formatValue(Yc)[i]}
+                            Low: ${formatValue(Yl)[i]}
+                            High: ${formatValue(Yh)[i]}` // Might need to only do this if default doesnt exist during rerender
       // const xAxis = (g) => g.attr("transform", `translate(0,${height - margin.bottom})`).call(
       //     d3
       //       .axisBottom(X)
