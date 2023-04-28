@@ -1,6 +1,7 @@
 import React from "react";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import BoxPlotComponent from "./components/BoxPlotComponent";
+import CandleStickApex from "./components/CandleStickApex";
 import CandleStickPlot from "./components/CandleStickPlot";
 import TickerForm from "./components/TickerForm";
 import { secretKey } from "./vars";
@@ -47,6 +48,7 @@ function App() {
       <header className="App-header">
         <h1>Trader Point</h1>
       </header>
+      <CandleStickApex />
       <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
       {renderLineChart}
       <BoxPlotComponent stockData={stockData} />
