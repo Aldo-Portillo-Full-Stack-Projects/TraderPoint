@@ -22,6 +22,11 @@ function CandleStickPlot() {
         },
         color,
         marks: [
+          Plot.ruleY(data, Plot.selectFirst({
+            y: d => d.Open,
+            stroke: 'grey',
+            strokeDasharray: "3,2",
+          })),
           Plot.ruleX(data, {
             x: "Date",
             y1: "Low",
