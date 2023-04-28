@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { useD3 } from '../hooks/useD3';
 import { scaleLinear } from 'd3';
 
-const data = [{"v":1.52045562e+09,"vw":331.6864,"o":360.3833,"c":290.2533,"h":384.29,"l":273.9,"t":1648785600000,"n":16271603},{"v":1.94537874e+09,"vw":252.2519,"o":286.9233,"c":252.7533,"h":318.5,"l":206.8567,"t":1651377600000,"n":19471621},{"v":2.010256812e+09,"vw":234.557,"o":251.72,"c":224.4733,"h":264.21,"l":208.6933,"t":1654056000000,"n":17047578},{"v":1.744949172e+09,"vw":251.1238,"o":227,"c":297.15,"h":298.32,"l":216.1667,"t":1656648000000,"n":14373708},{"v":1.694911809e+09,"vw":296.8066,"o":301.275,"c":275.61,"h":314.6667,"l":271.81,"t":1659326400000,"n":17865216},{"v":1.298828191e+09,"vw":288.9942,"o":272.575,"c":265.25,"h":313.8,"l":262.47,"t":1662004800000,"n":18180830},{"v":1.732993205e+09,"vw":223.4887,"o":254.5,"c":227.54,"h":257.5,"l":198.5863,"t":1664596800000,"n":21808048},{"v":1.884537364e+09,"vw":190.8179,"o":234.05,"c":194.7,"h":237.3951,"l":166.185,"t":1667275200000,"n":21594488},{"v":2.943242097e+09,"vw":146.0149,"o":197.08,"c":123.18,"h":198.92,"l":108.24,"t":1669870800000,"n":29614759},{"v":3.895877357e+09,"vw":135.0728,"o":118.47,"c":173.22,"h":180.68,"l":101.81,"t":1672549200000,"n":32665325},{"v":3.625368736e+09,"vw":199.1807,"o":173.89,"c":205.71,"h":217.65,"l":169.93,"t":1675227600000,"n":32294930},{"v":3.311189475e+09,"vw":188.2745,"o":206.21,"c":207.46,"h":207.79,"l":163.91,"t":1677646800000,"n":30441655},{"v":2.38174453e+09,"vw":177.0209,"o":199.91,"c":160.19,"h":202.6897,"l":152.37,"t":1680321600000,"n":23580247}]
+const data = [{"v":1.52045562e+09,"vw":331.6864,"o":360.3833,"c":290.2533,"h":384.29,"l":273.9,"t":1648785600000,"n":16271603},{"v":1.94537874e+09,"vw":252.2519,"o":286.9233,"c":252.7533,"h":318.5,"l":206.8567,"t":1651377600000,"n":19471621},{"v":2.010256812e+09,"vw":234.557,"o":251.72,"c":224.4733,"h":264.21,"l":208.6933,"t":1654056000000,"n":17047578},{"v":1.744949172e+09,"vw":251.1238,"o":227,"c":297.15,"h":298.32,"l":216.1667,"t":1656648000000,"n":14373708},{"v":1.694911809e+09,"vw":296.8066,"o":301.275,"c":275.61,"h":314.6667,"l":271.81,"t":1659326400000,"n":17865216},{"v":1.298828191e+09,"vw":288.9942,"o":272.575,"c":265.25,"h":313.8,"l":262.47,"t":1662004800000,"n":18180830},{"v":1.732993205e+09,"vw":223.4887,"o":254.5,"c":227.54,"h":257.5,"l":198.5863,"t":1664596800000,"n":21808048}]
 
 export default function BoxPlotComponent({stockData}) {
   const ref = useD3(
@@ -22,6 +22,10 @@ export default function BoxPlotComponent({stockData}) {
 
       const xFormat = "%b %-d"
       const yFormat = "~f"
+
+      const stroke = "currentColor"
+      const strokeLinecap = "round"
+      const colors = ["#4daf4a", "#999999", "#e41a1c"]
       
       //Compute Variables
       /** 
@@ -70,7 +74,7 @@ export default function BoxPlotComponent({stockData}) {
                             Low: ${formatValue(Yl)[i]}
                             High: ${formatValue(Yh)[i]}` // Might need to only do this if default doesnt exist during rerender
 
-        //Append Gs to svg
+        //Draw Graph
 
         svg.append("g")
           .attr("width", width)
@@ -96,6 +100,28 @@ export default function BoxPlotComponent({stockData}) {
               .attr("fill", "currentColor")
               .attr("text-anchor", "start")
               .text("mone"));
+
+          //Draw Plots
+        const g = svg.append("g")
+            .attr("stroke", stroke)
+            .attr("stroke-linecap", strokeLinecap)
+          .selectAll("g")
+          .data(L)
+          .join("g")
+            .attr("transform", i => `translate(${xScale(X[i])},0)`);
+        
+          g.append("line")
+            .attr("y1", i => yScale(Yl[i]))
+            .attr("y2", i => yScale(Yh[i]));
+        
+          g.append("line")
+            .attr("y1", i => yScale(Yo[i]))
+            .attr("y2", i => yScale(Yc[i]))
+            .attr("stroke-width", xScale.bandwidth())
+            .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
+        
+          if (title) g.append("title")
+              .text(title);
       // const xAxis = (g) => g.attr("transform", `translate(0,${height - margin.bottom})`).call(
       //     d3
       //       .axisBottom(X)
