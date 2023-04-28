@@ -49,10 +49,10 @@ function App() {
         <h1>Trader Point</h1>
       </header>
       <CandleStickApex />
-      <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
+      {/* <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
       {renderLineChart}
       <BoxPlotComponent stockData={stockData} />
-      <CandleStickPlot />
+      <CandleStickPlot /> */}
     </div>
   );
 }
