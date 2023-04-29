@@ -68,7 +68,7 @@ function App() {
       </header>
       
        <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
-       <CandleStickApex formattedData={formattedData}/>
+       <CandleStickApex formattedData={formattedData} stockTicker={searchParams.ticker}/>
 
       {/*{renderLineChart}
       <BoxPlotComponent stockData={stockData} />

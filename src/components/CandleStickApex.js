@@ -2,14 +2,14 @@ import dayjs from "dayjs";
 import React from "react";
 import Chart from "react-apexcharts";
 
-function CandleStickApex ({formattedData}) {
+function CandleStickApex ({formattedData, stockTicker}) {
     const options = {
         chart: {
           height: 350,
           type: 'candlestick',
         },
         title: {
-          text: 'CandleStick Chart - Category X-axis',
+          text: `${stockTicker} Stock`,
           align: 'left'
         },
         annotations: {
