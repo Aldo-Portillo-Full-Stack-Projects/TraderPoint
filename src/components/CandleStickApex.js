@@ -1,8 +1,13 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-function CandleStickApex () {
+function CandleStickApex ({formattedData}) {
     const options = {
+        xaxis:{
+            labels: {
+                format: 'dd/MM',
+              }
+        },
         chart: {
             type: "candlestick"
         },
@@ -14,14 +19,13 @@ function CandleStickApex () {
             wick: {
                 useFillColor: true,
             }
-        }
+        },
     }
+    const [series, setSeries] = React.useState([{data: formattedData}])
 
-    const [series, setSeries] = React.useState([{data: [
-        [1538856000000, 6593.34, 6600, 6582.63, 6600], 
-        [1538856900000, 6595.16, 6604.76, 6590.73, 6593.86]
-      ]}])
-
+    React.useEffect(() => {
+        setSeries([{data: formattedData}])
+    }, [formattedData])
     return (
         <div className="app">
           <div className="row">
@@ -31,6 +35,7 @@ function CandleStickApex () {
                 series={series}
                 type="candlestick"
                 width="500"
+                xaxis={options.xaxis}
               />
             </div>
           </div>

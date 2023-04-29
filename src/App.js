@@ -30,16 +30,34 @@ function App() {
   })
 
   const [stockData, setStockData] = React.useState([])
+  
+  const formattedData = []
+  
 
-  const renderLineChart = (
-    <LineChart width={400} height={400} data={stockData}>
-      <Line type="monotone" dataKey="o" stroke="#8884d8" />
-      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-      <XAxis dataKey="t" />
-      <YAxis domain={[110, 132]}/>
-      <Tooltip />
-    </LineChart>
-  );
+  // const renderLineChart = (
+  //   <LineChart width={400} height={400} data={stockData}>
+  //     <Line type="monotone" dataKey="o" stroke="#8884d8" />
+  //     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+  //     <XAxis dataKey="t" />
+  //     <YAxis domain={[110, 132]}/>
+  //     <Tooltip />
+  //   </LineChart>
+  // );
+
+  React.useEffect(() => {
+    stockData.length > 0 && stockData.map(object => {
+      const tempArr = []
+      tempArr.push(object.t)
+      tempArr.push(object.o)
+      tempArr.push(object.h)
+      tempArr.push(object.l)
+      tempArr.push(object.c)
+      formattedData.push(tempArr)
+      console.log(formattedData);
+    })
+
+    
+  }, [stockData])
 
 
   
@@ -48,9 +66,11 @@ function App() {
       <header className="App-header">
         <h1>Trader Point</h1>
       </header>
-      <CandleStickApex />
-      {/* <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
-      {renderLineChart}
+      
+       <TickerForm searchParams={searchParams} setSearchParams={setSearchParams} setStockData={setStockData} />
+       <CandleStickApex formattedData={formattedData}/>
+
+      {/*{renderLineChart}
       <BoxPlotComponent stockData={stockData} />
       <CandleStickPlot /> */}
     </div>
